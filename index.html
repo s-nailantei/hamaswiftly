@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HamaSwiftly - Find Your Perfect Home in Nairobi</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>HamaSwiftly</h1>
+                <span class="tagline">Your Home, Swiftly Found</span>
+            </div>
+            <nav class="nav">
+                <a href="#" class="nav-link active" id="search-nav">Search</a>
+                <a href="#" class="nav-link" id="favorites-nav">Favorites <span class="badge" id="fav-count">0</span></a>
+                <a href="#" class="nav-link" id="my-listings-nav" style="display:none">My Listings</a>
+                <div id="auth-buttons">
+                    <button class="btn btn-outline" id="login-btn">Login</button>
+                    <button class="btn btn-primary" id="register-btn">Sign Up</button>
+                </div>
+                <div id="user-menu" style="display:none">
+                    <span class="user-greeting">Hi, <span id="user-name"></span></span>
+                    <span class="badge premium-badge" id="premium-badge" style="display:none">PREMIUM</span>
+                    <button class="btn btn-outline" id="upgrade-btn" style="display:none">Upgrade</button>
+                    <button class="btn btn-secondary" id="logout-btn">Logout</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <section class="hero">
+            <div class="container">
+                <h2>Find Your Dream Home in Nairobi</h2>
+                <p>Browse thousands of listings across Nairobi and its outskirts</p>
+            </div>
+        </section>
+
+        <section class="search-section">
+            <div class="container">
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="Search by location (e.g., Westlands, Kilimani, Karen...)">
+                    <button class="btn btn-primary" id="search-btn">Search</button>
+                </div>
+                
+                <div class="filters">
+                    <div class="filter-group">
+                        <label>Price Range (KES)</label>
+                        <div class="price-inputs">
+                            <input type="number" id="min-price" placeholder="Min" min="0">
+                            <span>-</span>
+                            <input type="number" id="max-price" placeholder="Max" min="0">
+                        </div>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Bedrooms</label>
+                        <div class="btn-group">
+                            <button class="filter-btn" data-bedrooms="any">Any</button>
+                            <button class="filter-btn" data-bedrooms="1">1</button>
+                            <button class="filter-btn" data-bedrooms="2">2</button>
+                            <button class="filter-btn" data-bedrooms="3">3</button>
+                            <button class="filter-btn" data-bedrooms="4">4+</button>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Property Type</label>
+                        <select id="property-type">
+                            <option value="any">Any Type</option>
+                            <option value="apartment">Apartment</option>
+                            <option value="house">House</option>
+                            <option value="maisonette">Maisonette</option>
+                            <option value="bungalow">Bungalow</option>
+                            <option value="studio">Studio</option>
+                            <option value="bedsitter">Bedsitter</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Area</label>
+                        <select id="area-filter">
+                            <option value="any">All Nairobi & Outskirts</option>
+                            <optgroup label="Nairobi CBD & Central">
+                                <option value="cbd">CBD</option>
+                                <option value="westlands">Westlands</option>
+                                <option value="hurlingham">Hurlingham</option>
+                                <option value="parklands">Parklands</option>
+                            </optgroup>
+                            <optgroup label="Upper Nairobi">
+                                <option value="kilimani">Kilimani</option>
+                                <option value="karen">Karen</option>
+                                <option value="lavington">Lavington</option>
+                                <option value="kileleshwa">Kileleshwa</option>
+                                <option value="runda">Runda</option>
+                                <option value="langata">Langata</option>
+                            </optgroup>
+                            <optgroup label="Eastlands (Affordable)">
+                                <option value="eastlands">Eastlands (All)</option>
+                                <option value="southb">South B/C</option>
+                                <option value="umoj">Umoja</option>
+                                <option value="donholm">Donholm</option>
+                                <option value="buruburu">Buruburu</option>
+                                <option value="kayole">Kayole</option>
+                                <option value="embakasi">Embakasi</option>
+                                <option value="kariobangi">Kariobangi</option>
+                                <option value="huruma">Huruma</option>
+                            </optgroup>
+                            <optgroup label="Thika Road Corridor">
+                                <option value="thika">Thika Town</option>
+                                <option value="kasarani">Kasarani</option>
+                                <option value="roysambu">Roysambu</option>
+                                <option value="kahawa">Kahawa</option>
+                            </optgroup>
+                            <optgroup label="Kabete Area">
+                                <option value="kabete">Kabete</option>
+                                <option value="uthiru">Uthiru</option>
+                            </optgroup>
+                            <optgroup label="Outskirts">
+                                <option value="kitengela">Kitengela</option>
+                                <option value="ruiru">Ruiru</option>
+                                <option value="kajiado">Kajiado</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Lease Duration</label>
+                        <select id="lease-duration">
+                            <option value="any">Any Duration</option>
+                            <option value="monthly">Monthly</option>
+                            <option value="quarterly">Quarterly</option>
+                            <option value="annually">Annually</option>
+                        </select>
+                    </div>
+                    
+                    <button class="btn btn-secondary" id="reset-filters">Reset Filters</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="results-section">
+            <div class="container">
+                <div class="results-header">
+                    <h2>Available Rentals</h2>
+                    <span id="results-count">0 properties found</span>
+                </div>
+                
+                <div class="view-toggle">
+                    <button class="toggle-btn active" id="grid-view">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="14" width="7" height="7"></rect>
+                            <rect x="3" y="14" width="7" height="7"></rect>
+                        </svg>
+                    </button>
+                    <button class="toggle-btn" id="list-view">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="8" y1="6" x2="21" y2="6"></line>
+                            <line x1="8" y1="12" x2="21" y2="12"></line>
+                            <line x1="8" y1="18" x2="21" y2="18"></line>
+                            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                        </svg>
+                    </button>
+                    <button class="toggle-btn" id="map-view">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+                            <line x1="8" y1="2" x2="8" y2="18"></line>
+                            <line x1="16" y1="6" x2="16" y2="22"></line>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="results-container">
+                    <div id="properties-grid" class="properties-grid"></div>
+                    <div id="map-container" class="map-container" style="display: none;"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Login Modal -->
+    <div class="modal" id="login-modal">
+        <div class="modal-content modal-sm">
+            <button class="modal-close" onclick="closeModal('login-modal')">&times;</button>
+            <h2>Welcome Back</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="login-email" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Login</button>
+                <p class="form-switch">Don't have an account? <a href="#" id="switch-to-register">Sign Up</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal" id="register-modal">
+        <div class="modal-content modal-sm">
+            <button class="modal-close" onclick="closeModal('register-modal')">&times;</button>
+            <h2>Create Account</h2>
+            <form id="register-form">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="register-name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="register-email" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="tel" id="register-phone" placeholder="+254 7XX XXX XXX" required>
+                </div>
+                <div class="form-group">
+                    <label>I am a</label>
+                    <select id="register-role" required>
+                        <option value="tenant">Tenant - Looking for a home</option>
+                        <option value="landlord">Landlord/Owner - Listing property</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="register-password" required minlength="6">
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+                <p class="form-switch">Already have an account? <a href="#" id="switch-to-login">Login</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Upgrade Modal -->
+    <div class="modal" id="upgrade-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('upgrade-modal')">&times;</button>
+            <h2>Upgrade to HamaSwiftly Premium</h2>
+            <div class="premium-plans">
+                <div class="plan-card">
+                    <h3>Basic</h3>
+                    <div class="plan-price">FREE</div>
+                    <ul>
+                        <li>Browse all listings</li>
+                        <li>Save favorites</li>
+                        <li>Contact via form only</li>
+                        <li>5 property listings/month</li>
+                    </ul>
+                </div>
+                <div class="plan-card featured">
+                    <span class="popular-badge">Most Popular</span>
+                    <h3>Premium</h3>
+                    <div class="plan-price">KES 999<span>/month</span></div>
+                    <ul>
+                        <li>Direct phone & WhatsApp contact</li>
+                        <li>Priority listing placement</li>
+                        <li>Unlimited property listings</li>
+                        <li>Tenant screening tools</li>
+                        <li>Analytics dashboard</li>
+                    </ul>
+                    <button class="btn btn-primary btn-full" id="subscribe-premium">Subscribe Now</button>
+                </div>
+                <div class="plan-card">
+                    <h3>Business</h3>
+                    <div class="plan-price">KES 4,999<span>/month</span></div>
+                    <ul>
+                        <li>Everything in Premium</li>
+                        <li>Multiple agent accounts</li>
+                        <li>Featured property badges</li>
+                        <li>Priority support</li>
+                        <li>Custom branding</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Property Modal -->
+    <div class="modal" id="add-property-modal">
+        <div class="modal-content modal-lg">
+            <button class="modal-close" onclick="closeModal('add-property-modal')">&times;</button>
+            <h2>List Your Property</h2>
+            <form id="add-property-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Property Title</label>
+                        <input type="text" id="prop-title" placeholder="e.g., Modern 2BR Apartment in Westlands" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Property Type</label>
+                        <select id="prop-type" required>
+                            <option value="apartment">Apartment</option>
+                            <option value="house">House</option>
+                            <option value="maisonette">Maisonette</option>
+                            <option value="bungalow">Bungalow</option>
+                            <option value="studio">Studio</option>
+                            <option value="bedsitter">Bedsitter</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Bedrooms</label>
+                        <input type="number" id="prop-bedrooms" min="0" max="10" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Bathrooms</label>
+                        <input type="number" id="prop-bathrooms" min="1" max="10" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Monthly Rent (KES)</label>
+                        <input type="number" id="prop-price" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Size (sq ft)</label>
+                        <input type="number" id="prop-sqft" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Lease Duration</label>
+                        <select id="prop-lease" required>
+                            <option value="monthly">Monthly</option>
+                            <option value="quarterly">Quarterly</option>
+                            <option value="annually">Annually</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Area</label>
+                        <select id="prop-area" required>
+                            <optgroup label="Nairobi CBD & Central">
+                                <option value="cbd">CBD</option>
+                                <option value="westlands">Westlands</option>
+                                <option value="hurlingham">Hurlingham</option>
+                                <option value="parklands">Parklands</option>
+                            </optgroup>
+                            <optgroup label="Upper Nairobi">
+                                <option value="kilimani">Kilimani</option>
+                                <option value="karen">Karen</option>
+                                <option value="lavington">Lavington</option>
+                                <option value="kileleshwa">Kileleshwa</option>
+                                <option value="runda">Runda</option>
+                                <option value="langata">Langata</option>
+                            </optgroup>
+                            <optgroup label="Eastlands (Affordable)">
+                                <option value="eastlands">Eastlands (All)</option>
+                                <option value="southb">South B/C</option>
+                                <option value="umoj">Umoja</option>
+                                <option value="donholm">Donholm</option>
+                                <option value="buruburu">Buruburu</option>
+                                <option value="kayole">Kayole</option>
+                                <option value="embakasi">Embakasi</option>
+                                <option value="kariobangi">Kariobangi</option>
+                                <option value="huruma">Huruma</option>
+                            </optgroup>
+                            <optgroup label="Thika Road Corridor">
+                                <option value="thika">Thika Town</option>
+                                <option value="kasarani">Kasarani</option>
+                                <option value="roysambu">Roysambu</option>
+                                <option value="kahawa">Kahawa</option>
+                            </optgroup>
+                            <optgroup label="Kabete Area">
+                                <option value="kabete">Kabete</option>
+                                <option value="uthiru">Uthiru</option>
+                            </optgroup>
+                            <optgroup label="Outskirts">
+                                <option value="kitengela">Kitengela</option>
+                                <option value="ruiru">Ruiru</option>
+                                <option value="kajiado">Kajiado</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Specific Address</label>
+                        <input type="text" id="prop-address" placeholder="e.g., Near Sarit Centre" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Latitude</label>
+                        <input type="number" id="prop-lat" step="any" placeholder="-1.2921">
+                    </div>
+                    <div class="form-group">
+                        <label>Longitude</label>
+                        <input type="number" id="prop-lng" step="any" placeholder="36.8219">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="prop-description" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Amenities (comma separated)</label>
+                    <input type="text" id="prop-amenities" placeholder="e.g., Water, Parking, Security, Gym">
+                </div>
+                <div class="form-group">
+                    <label>Image URLs (comma separated, or leave blank for defaults)</label>
+                    <input type="text" id="prop-images" placeholder="https://...">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Contact Phone</label>
+                        <input type="tel" id="prop-phone" placeholder="+254 7XX XXX XXX" required>
+                    </div>
+                    <div class="form-group">
+                        <label>WhatsApp Number</label>
+                        <input type="tel" id="prop-whatsapp" placeholder="+254 7XX XXX XXX">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">List Property</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Property Detail Modal -->
+    <div class="modal" id="property-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('property-modal')">&times;</button>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- My Listings Modal -->
+    <div class="modal" id="my-listings-modal">
+        <div class="modal-content modal-lg">
+            <button class="modal-close" onclick="closeModal('my-listings-modal')">&times;</button>
+            <h2>My Listings</h2>
+            <div id="my-listings-container"></div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3>HamaSwiftly</h3>
+                    <p>Your trusted rental platform in Nairobi</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <a href="#">About Us</a>
+                    <a href="#">Contact</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Privacy Policy</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Areas</h4>
+                    <a href="#">Westlands</a>
+                    <a href="#">Kilimani</a>
+                    <a href="#">Karen</a>
+                    <a href="#">CBD</a>
+                </div>
+                <div class="footer-contact">
+                    <h4>Contact Us</h4>
+                    <p>📞 +254 700 000 000</p>
+                    <p>📧 info@hamaswiftly.co.ke</p>
+                    <p>📍 Nairobi, Kenya</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 HamaSwiftly. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
