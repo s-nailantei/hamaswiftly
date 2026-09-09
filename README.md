@@ -36,7 +36,6 @@
 
 ## Contact
 
-**Owner:** 0700 228 493  
 **Email:** hamaswiftly@gmail.com  
 **Location:** Nairobi, Kenya
 
