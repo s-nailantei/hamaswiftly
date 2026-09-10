@@ -1084,7 +1084,7 @@ function openPropertyModal(propertyId) {
                 <h3>Want Direct Contact?</h3>
                 <p>Upgrade to Premium to get the landlord's phone and WhatsApp for instant communication.</p>
                 <button class="btn btn-primary" onclick="closeModal('property-modal'); openModal('upgrade-modal');">
-                    Upgrade to Premium - KES 999/month
+                    Upgrade to Premium - KES 499/month
                 </button>
             </div>
         `;

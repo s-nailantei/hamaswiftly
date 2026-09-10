@@ -1,0 +1,12 @@
+{
+  "name": "gari-spa",
+  "version": "1.0.0",
+  "description": "Gari Spa - Find the nearest carwash in Kenya",
+  "private": true,
+  "scripts": {
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd web && npm run dev",
+    "seed": "cd backend && npm run seed",
+    "install:all": "cd backend && npm install && cd ../web && npm install"
+  }
+}

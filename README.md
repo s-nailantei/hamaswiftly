@@ -32,7 +32,7 @@
 | Plan | Price | Features |
 |------|-------|----------|
 | Basic | Free | Browse listings, save favorites, contact via form |
-| Premium | KES 999/month | Direct phone & WhatsApp, unlimited listings, priority placement |
+| Premium | KES 499/month | Direct phone & WhatsApp, unlimited listings, priority placement |
 
 ## Contact
 
